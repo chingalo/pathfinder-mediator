@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "description": "Path finder project mediator",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "Joseph Chingalo",
   "license": "ISC",
+  "scripts": {
+    "start": "nodejs index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "dependencies": {
     "commitizen": "^2.10.1",
     "cz-conventional-changelog": "^2.1.0",
