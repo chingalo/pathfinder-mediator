@@ -26,7 +26,7 @@ async function startApp() {
         } = response;
         const newDataValues = getDataValuesObjects(dataValues, dataElements, dataElementMapper);
         const payload = { ...{},
-            dataValues: newDataValues
+            dataValues: []
         }
         const {
             importCount,
