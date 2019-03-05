@@ -4,11 +4,11 @@ const {
 } = require('./data-values-helper');
 
 const {
-    getDataElementsMapper
-} = require('./data-element');
+    getLastMonthsIsoPeriod
+} = require('./period-helper');
 
 module.exports = {
-    getDataElementsMapper,
     getDataValueFromServer,
-    uploadDataValuesToTheServer
+    uploadDataValuesToTheServer,
+    getLastMonthsIsoPeriod
 }
