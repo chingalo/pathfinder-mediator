@@ -17,7 +17,8 @@ async function getDataValueFromServer(serverUrl, headers, dataSet, orgUnit, peri
                 if (!error && response && response.statusCode === 200) {
                     body = JSON.parse(body);
                     if (!body.dataValues) {
-                        body = { ...body,
+                        body = {
+                            ...body,
                             dataValues
                         }
                     }
@@ -47,6 +48,9 @@ async function uploadDataValuesToTheServer(serverUrl, headers, payLoad) {
                 body: JSON.stringify(payLoad)
             },
             (error, response, body) => {
+                // console.log(error)
+                // console.log(response)
+                // console.log(body)
                 body = JSON.parse(body);
                 const {
                     status

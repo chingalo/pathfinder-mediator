@@ -8,12 +8,14 @@ const {
 } = require('./period-helper');
 
 const {
-    getOrganisationUnitsByLevel
+    getOrganisationUnitsByLevel,
+    getOrganisationUnitsByDataSetId
 } = require('./organisation-helper');
 
 module.exports = {
     getDataValueFromServer,
     uploadDataValuesToTheServer,
     getLastMonthsIsoPeriod,
-    getOrganisationUnitsByLevel
+    getOrganisationUnitsByLevel,
+    getOrganisationUnitsByDataSetId
 }

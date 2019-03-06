@@ -26,6 +26,33 @@ async function getOrganisationUnitsByLevel(serverUrl, headers, level) {
     })
 }
 
+async function getOrganisationUnitsByDataSetId(serverUrl, headers, dataSetIds) {
+    const dataSetIdString = dataSetIds.join(',');
+    const url = `${serverUrl}/api/organisationUnits.json?fields=id,children[id]&filter=dataSets.id:in:[${dataSetIdString}]&paging=false`;
+    return new Promise(resolve => {
+        request({
+                headers,
+                uri: url,
+                method: 'GET'
+            },
+            (error, response, body) => {
+                if (!error && response && response.statusCode === 200) {
+                    body = JSON.parse(body);
+                    const {
+                        organisationUnits
+                    } = body;
+                    resolve(
+                        organisationUnits
+                    );
+                } else {
+                    resolve([]);
+                }
+            }
+        );
+    })
+}
+
 module.exports = {
-    getOrganisationUnitsByLevel
+    getOrganisationUnitsByLevel,
+    getOrganisationUnitsByDataSetId
 }
