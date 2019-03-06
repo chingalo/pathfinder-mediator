@@ -20,8 +20,8 @@ const souceServerUrl = 'https://dhis.moh.go.tz';
 const destinationServerUrl = 'https://dhis2tz.pathfinder.org';
 const numberOfPreviousMonth = (process.argv[2]) ? process.argv[2] : 3;
 const dataSets = ["TfoI3vTGv1f", "kSaoJVXNxZE", "GzvLb3XVZbR", "cap79mdf6Co", "rm3y3VHPiFD", "zeEp4Xu2GOm"];
-console.log(numberOfPreviousMonth)
-// startApp();
+
+startApp();
 
 async function startApp() {
     const periods = getLastMonthsIsoPeriod(numberOfPreviousMonth).reverse();
