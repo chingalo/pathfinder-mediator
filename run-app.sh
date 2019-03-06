@@ -1,6 +1,6 @@
 #!/bin/bash
 clear
-cd /home/chingalo
+cd /home/chingalo/pathfinder-mediator
 git reset --hard
 git pull origin master
 
