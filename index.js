@@ -29,14 +29,16 @@ async function startApp() {
     const organisationUnits = await getOrganisationUnitsByDataSetId(destinationServerUrl, destinationHeaders, dataSets);
     const size = parseInt(organisationUnits.length / 4);
     const organisationUnitsArray = _.chunk(organisationUnits, size);
-    [organisationUnitsArray[0]].map(organisationUnitArray => {
-        console.log(`Discovering data value for datasets for ` + organisationUnitArray.length + ` organisationUnits`);
-        const response = await getDataValueFromServer(souceServerUrl, sourceHeaders, dataSets, organisationUnitArray, periods);
-        const {
-            dataValues
-        } = response;
-        console.log(dataValues.length);
-    });
+    console.log("Loading data values")
+    const response = await getDataValueFromServer(souceServerUrl, sourceHeaders, dataSets, organisationUnitsArray[0], periods);
+    const {
+        dataValues
+    } = response;
+    console.log(dataValues.length);
+    // [organisationUnitsArray[0]].map(organisationUnitArray => {
+    //     console.log(`Discovering data value for datasets for ` + organisationUnitArray.length + ` organisationUnits`);
+
+    // });
 
 
 

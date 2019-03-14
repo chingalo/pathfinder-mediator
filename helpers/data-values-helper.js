@@ -5,9 +5,9 @@ const _ = require('lodash');
 
 
 async function getDataValueFromServer(serverUrl, headers, dataSets, orgUnit, periods) {
-    const dataSetString = dataSets.json('&dataSet=');
-    const periodString = periods.json('&period=');
-    const orgUnitString = dataSets.json('&orgUnit=');
+    const dataSetString = dataSets.join('&dataSet=');
+    const periodString = periods.join('&period=');
+    const orgUnitString = dataSets.join('&orgUnit=');
     const url = `${serverUrl}/api/dataValueSets.json?dataSet=${dataSetString}&orgUnit=${orgUnitString}&children=true&period=${periodString}`;
     return new Promise(resolve => {
         request({
