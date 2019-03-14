@@ -9,7 +9,6 @@ async function getDataValueFromServer(serverUrl, headers, dataSets, orgUnits, pe
     const periodString = periods.join('&period=');
     const orgUnitString = orgUnits.join('&orgUnit=');
     const url = `${serverUrl}/api/dataValueSets.json?dataSet=${dataSetString}&orgUnit=${orgUnitString}&children=false&period=${periodString}&children=false`;
-    console.log(url);
     return new Promise(resolve => {
         request({
                 headers,
@@ -49,24 +48,29 @@ async function uploadDataValuesToTheServer(serverUrl, headers, payLoad) {
                 body: JSON.stringify(payLoad)
             },
             (error, response, body) => {
-                // console.log(error)
-                // console.log(response)
-                // console.log(body)
-                body = JSON.parse(body);
-                const {
-                    status
-                } = body;
-                const {
-                    importCount
-                } = body;
-                const {
-                    conflicts
-                } = body;
-                resolve({
-                    conflicts,
-                    importCount,
-                    status
-                });
+                try {
+                    body = JSON.parse(body);
+                    const {
+                        status
+                    } = body;
+                    const {
+                        importCount
+                    } = body;
+                    const {
+                        conflicts
+                    } = body;
+                    resolve({
+                        conflicts,
+                        importCount,
+                        status
+                    });
+                } catch (e) {
+                    resolve({
+                        conflicts: "",
+                        importCount: "",
+                        status: ""
+                    });
+                }
             }
         );
     });

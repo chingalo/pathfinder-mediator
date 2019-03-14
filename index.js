@@ -20,7 +20,7 @@ const souceServerUrl = 'https://dhis.moh.go.tz';
 const destinationServerUrl = 'https://dhis2tz.pathfinder.org';
 const numberOfPreviousMonth = (process.argv[2]) ? process.argv[2] : 3;
 const ouChunkSize = (process.argv[2]) ? 25 : 50;
-const periods = getLastMonthsIsoPeriod(numberOfPreviousMonth).reverse();
+const periodsData = _.chunk(getLastMonthsIsoPeriod(numberOfPreviousMonth).reverse(), 3);
 const dataSets = ["TfoI3vTGv1f", "kSaoJVXNxZE", "GzvLb3XVZbR", "cap79mdf6Co", "rm3y3VHPiFD", "zeEp4Xu2GOm"];
 
 startApp();
@@ -29,31 +29,35 @@ async function startApp() {
     console.log("Discovering organisation units");
     const organisationUnits = await getOrganisationUnitsByDataSetId(destinationServerUrl, destinationHeaders, dataSets);
     if (organisationUnits.length > 0) {
-        console.log(organisationUnits.length);
-        const organisationUnitsArray = _.chunk(_.map(organisationUnits, organisationUnit => organisationUnit.id), ouChunkSize);
-        for (const organisationUnitArray of organisationUnitsArray) {
-            console.log("Loading data values")
-            const response = await getDataValueFromServer(souceServerUrl, sourceHeaders, dataSets, organisationUnitArray, periods);
-            const {
-                dataValues
-            } = response;
-            const dataValueCount = dataValues.length;
-            const payload = {
-                ...{},
-                dataValues
-            }
-            if (dataValueCount > 0) {
-                console.log(`Uploading data value ${dataValueCount}`);
+        for (const periods of periodsData) {
+            const organisationUnitsArray = _.chunk(_.map(organisationUnits, organisationUnit => organisationUnit.id), ouChunkSize);
+            for (const organisationUnitArray of organisationUnitsArray) {
+                console.log("Loading data values")
+                const response = await getDataValueFromServer(souceServerUrl, sourceHeaders, dataSets, organisationUnitArray, periods);
                 const {
-                    importCount,
-                    status,
-                    conflicts
-                } = await uploadDataValuesToTheServer(destinationServerUrl, destinationHeaders, payload);
-                console.log(JSON.stringify({
-                    status,
-                    importCount,
-                    conflicts
-                }));
+                    dataValues
+                } = response;
+                const dataValuesData = _.chunk(dataValues, 500);
+                for (const data of dataValuesData) {
+                    const payload = {
+                        ...{},
+                        dataValues: data
+                    };
+                    const dataValueCount = data.length;
+                    if (dataValueCount > 0) {
+                        console.log(`Uploading data value ${dataValueCount}`);
+                        const {
+                            importCount,
+                            status,
+                            conflicts
+                        } = await uploadDataValuesToTheServer(destinationServerUrl, destinationHeaders, payload);
+                        console.log(JSON.stringify({
+                            status,
+                            importCount,
+                            conflicts
+                        }));
+                    }
+                }
             }
         }
     } else {
