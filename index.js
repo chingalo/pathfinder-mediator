@@ -27,16 +27,21 @@ async function startApp() {
     const periods = getLastMonthsIsoPeriod(numberOfPreviousMonth).reverse();
     console.log("Discovering organisation units");
     const organisationUnits = await getOrganisationUnitsByDataSetId(destinationServerUrl, destinationHeaders, dataSets);
-    const size = parseInt(organisationUnits.length / 4);
-    const organisationUnitsArray = _.chunk(organisationUnits, size);
-    for (const organisationUnitArray of organisationUnitsArray) {
-        console.log("Loading data values")
-        const response = await getDataValueFromServer(souceServerUrl, sourceHeaders, dataSets, organisationUnitArray, periods);
-        const {
-            dataValues
-        } = response;
-        console.log(dataValues.length);
+    if (organisationUnits.length > 0) {
+        const size = parseInt(organisationUnits.length / 4);
+        const organisationUnitsArray = _.chunk(_.map(organisationUnits, organisationUnit => organisationUnit.id), size);
+        for (const organisationUnitArray of organisationUnitsArray) {
+            console.log("Loading data values")
+            const response = await getDataValueFromServer(souceServerUrl, sourceHeaders, dataSets, organisationUnitArray, periods);
+            const {
+                dataValues
+            } = response;
+            console.log(dataValues.length);
+        }
+    } else {
+        console.log(`There is no ou assigned for datasets ${dataSets.join(',')}`)
     }
+
 
     // [organisationUnitsArray[0]].map(organisationUnitArray => {
     //     console.log(`Discovering data value for datasets for ` + organisationUnitArray.length + ` organisationUnits`);
