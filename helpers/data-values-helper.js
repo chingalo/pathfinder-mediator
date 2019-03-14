@@ -30,9 +30,6 @@ async function getDataValueFromServer(serverUrl, headers, dataSets, orgUnit, per
                     );
                 } else {
                     resolve({
-                        dataSet,
-                        period,
-                        orgUnit,
                         dataValues
                     });
                 }
