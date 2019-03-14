@@ -28,7 +28,8 @@ async function startApp() {
     console.log("Discovering organisation units");
     const organisationUnits = await getOrganisationUnitsByDataSetId(destinationServerUrl, destinationHeaders, dataSets);
     if (organisationUnits.length > 0) {
-        const size = parseInt(organisationUnits.length / 4);
+        console.log(organisationUnits.length);
+        const size = 100;
         const organisationUnitsArray = _.chunk(_.map(organisationUnits, organisationUnit => organisationUnit.id), size);
         for (const organisationUnitArray of organisationUnitsArray) {
             console.log("Loading data values")
