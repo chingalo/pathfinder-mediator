@@ -25,41 +25,53 @@ startApp();
 
 async function startApp() {
     const periods = getLastMonthsIsoPeriod(numberOfPreviousMonth).reverse();
-    for (const dataSet of dataSets) {
-        console.log("Discovering organisation units");
-        const organisationUnits = await getOrganisationUnitsByDataSetId(destinationServerUrl, destinationHeaders, [dataSet]);
-        console.log(`Found ${organisationUnits.length} organisation units assigned for data set ${dataSet}`);
-        for (const organisationUnit of organisationUnits) {
-            if (organisationUnit && organisationUnit.children && organisationUnit.children.length === 0) {
-                const organisationUnitId = organisationUnit.id;
-                for (const period of periods) {
-                    console.log(`Discovering data value for dataset ${dataSet} period ${period} and organisationUnit ${organisationUnitId}`)
-                    const response = await getDataValueFromServer(souceServerUrl, sourceHeaders, dataSet, organisationUnitId, period);
-                    const {
-                        dataValues
-                    } = response;
-                    const payload = {
-                        ...{},
-                        dataValues
-                    }
-                    const dataValueCount = dataValues.length;
-                    if (dataValueCount > 0) {
-                        console.log(`Uploading data value ${dataValueCount} for dataset ${dataSet} period ${period} and organisationUnit ${organisationUnitId}`);
-                        const {
-                            importCount,
-                            status,
-                            conflicts
-                        } = await uploadDataValuesToTheServer(destinationServerUrl, destinationHeaders, payload);
-                        console.log(JSON.stringify({
-                            status,
-                            importCount,
-                            conflicts
-                        }));
-                    }
-                }
-            }
-        }
-    }
+    console.log("Discovering organisation units");
+    const organisationUnits = await getOrganisationUnitsByDataSetId(destinationServerUrl, destinationHeaders, dataSets);
+    const size = parseInt(organisationUnits.length / 4);
+    const organisationUnitsArray = _.chunk(organisationUnits, size);
+    [organisationUnitsArray[0]].map(organisationUnitArray => {
+        console.log(`Discovering data value for datasets for ` + organisationUnitArray.length + ` organisationUnits`);
+        const response = await getDataValueFromServer(souceServerUrl, sourceHeaders, dataSets, organisationUnitArray, periods);
+        const {
+            dataValues
+        } = response;
+        console.log(dataValues.length);
+    });
+
+
+
+
+    // for (const dataSet of dataSets) {
+
+
+    //     console.log(`Found ${organisationUnits.length} organisation units assigned for data set ${dataSet}`);
+    //     for (const organisationUnit of organisationUnits) {
+    //         if (organisationUnit && organisationUnit.children && organisationUnit.children.length === 0) {
+    //             const organisationUnitId = organisationUnit.id;
+    //             for (const period of periods) {
+
+    //                 const payload = {
+    //                     ...{},
+    //                     dataValues
+    //                 }
+    //                 const dataValueCount = dataValues.length;
+    //                 if (dataValueCount > 0) {
+    //                     console.log(`Uploading data value ${dataValueCount} for dataset ${dataSet} period ${period} and organisationUnit ${organisationUnitId}`);
+    //                     const {
+    //                         importCount,
+    //                         status,
+    //                         conflicts
+    //                     } = await uploadDataValuesToTheServer(destinationServerUrl, destinationHeaders, payload);
+    //                     console.log(JSON.stringify({
+    //                         status,
+    //                         importCount,
+    //                         conflicts
+    //                     }));
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 
 
 }
