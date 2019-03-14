@@ -9,6 +9,7 @@ async function getDataValueFromServer(serverUrl, headers, dataSets, orgUnit, per
     const periodString = periods.join('&period=');
     const orgUnitString = dataSets.join('&orgUnit=');
     const url = `${serverUrl}/api/dataValueSets.json?dataSet=${dataSetString}&orgUnit=${orgUnitString}&children=true&period=${periodString}`;
+    console.log(url);
     return new Promise(resolve => {
         request({
                 headers,
