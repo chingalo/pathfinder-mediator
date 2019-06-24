@@ -8,16 +8,21 @@ const {
 
 } = require('./helpers/index');
 
+const {
+    sourceConfig,
+    destinationConfig
+} = require('./config/index');
+
 const sourceHeaders = {
     'Content-Type': 'application/json',
-    Authorization: 'Basic ' + new Buffer('maintenance:Syst3mM@1nt3n@nc3').toString('base64')
+    Authorization: 'Basic ' + new Buffer.from(`${sourceConfig.username}:${sourceConfig.password}`).toString('base64')
 };
 const destinationHeaders = {
     'Content-Type': 'application/json',
-    Authorization: 'Basic ' + new Buffer('api_user:API_USER2019a').toString('base64')
+    Authorization: 'Basic ' + new Buffer.from(`${destinationConfig.username}:${destinationConfig.password}`).toString('base64')
 };
-const souceServerUrl = 'https://dhis.moh.go.tz';
-const destinationServerUrl = 'https://dhis2tz.pathfinder.org';
+const souceServerUrl = sourceConfig.url;
+const destinationServerUrl = destinationConfig.url;
 const numberOfPreviousMonth = (process.argv[2]) ? process.argv[2] : 3;
 const ouChunkSize = (process.argv[2]) ? 25 : 50;
 const periodsData = _.chunk(getLastMonthsIsoPeriod(numberOfPreviousMonth).reverse(), 3);

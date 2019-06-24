@@ -36,6 +36,7 @@ async function getOrganisationUnitsByDataSetId(serverUrl, headers, dataSetIds) {
                 method: 'GET'
             },
             (error, response, body) => {
+                // console.log(response)
                 if (!error && response && response.statusCode === 200) {
                     body = JSON.parse(body);
                     const {
