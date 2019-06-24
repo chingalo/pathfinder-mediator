@@ -9,7 +9,8 @@ const {
 
 const {
     getOrganisationUnitsByLevel,
-    getOrganisationUnitsByDataSetId
+    getOrganisationUnitsByDataSetId,
+    getFacilityByOuAndDataSet
 } = require('./organisation-helper');
 
 module.exports = {
@@ -17,5 +18,6 @@ module.exports = {
     uploadDataValuesToTheServer,
     getLastMonthsIsoPeriod,
     getOrganisationUnitsByLevel,
-    getOrganisationUnitsByDataSetId
+    getOrganisationUnitsByDataSetId,
+    getFacilityByOuAndDataSet
 }

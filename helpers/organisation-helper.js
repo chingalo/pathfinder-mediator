@@ -53,7 +53,35 @@ async function getOrganisationUnitsByDataSetId(serverUrl, headers, dataSetIds) {
     })
 }
 
+async function getFacilityByOuAndDataSet(serverUrl, headers, dataSetId, ou) {
+    const url = `${serverUrl}/api/organisationUnits.json?fields=id&filter=level:eq:4&filter=path:ilike:${ou}&filter=dataSets.id:in:[${dataSetId}]&paging=false`;
+    return new Promise(resolve => {
+        request({
+                headers,
+                uri: url,
+                method: 'GET'
+            },
+            (error, response, body) => {
+                if (!error && response && response.statusCode === 200) {
+                    body = JSON.parse(body);
+                    const {
+                        organisationUnits
+                    } = body;
+                    resolve(
+                        organisationUnits
+                    );
+                } else {
+                    console.log(body)
+                    resolve([]);
+                }
+            }
+        );
+    })
+
+}
+
 module.exports = {
     getOrganisationUnitsByLevel,
-    getOrganisationUnitsByDataSetId
+    getOrganisationUnitsByDataSetId,
+    getFacilityByOuAndDataSet
 }
